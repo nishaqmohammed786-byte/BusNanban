@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}My Digital Travel Wallet - BusNanban{% endblock %}
+
+{% block content %}
+<div class="profile-container" style="max-width: 1000px; margin: 3rem auto; padding: 0 1rem;">
+    
+    <!-- Profile Card Header Block -->
+    <div class="card profile-hero-card" style="padding: 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: linear-gradient(135deg, var(--text-dark) 0%, #1e293b 100%); color: #ffffff; border: none; margin-bottom: 2.5rem;">
+        <div class="user-meta" style="display: flex; align-items: center; gap: 1.5rem;">
+            <div class="avatar-circle" style="width: 70px; height: 70px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; color: white;">
+                {{ session.get('username', 'C')[0] | upper }}
+            </div>
+            <div>
+                <h2 style="margin: 0; font-size: 1.8rem; letter-spacing: -0.5px;">{{ session.get('username') }}</h2>
+                <p style="margin: 0.25rem 0 0 0; color: #cbd5e1; font-size: 0.95rem;">📱 +91 {{ session.get('phone_number') }}</p>
+            </div>
+        </div>
+        <div class="account-actions">
+            <a href="/auth/logout" class="btn btn-outline" style="border-color: #ef4444; color: #f87171;">Secure Log Out 🔒</a>
+        </div>
+    </div>
+
+    <!-- Active Tickets Segment Layout -->
+    <div class="ticket-wallet-section">
+        <h3 style="font-size: 1.4rem; color: var(--text-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🎟️</span> Your Running Boarding Passes
+        </h3>
+
+        <!-- This list maps from the rows returned via models.ticket.get_user_active_tickets -->
+        {% if tickets %}
+            <div class="ticket-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                {% for ticket in tickets %}
+                <div class="card boarding-pass" style="padding: 0; overflow: hidden; border-top: 6px solid var(--primary); position: relative;">
+                    
+                    <!-- Ticket Main Header details -->
+                    <div class="ticket-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px dashed rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; background-color: #fafafa;">
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700;">Pass ID</span>
+                            <h4 style="margin: 0; color: var(--text-dark); font-family: monospace; font-size: 1.1rem;">{{ ticket.ticket_uid }}</h4>
+                        </div>
+                        <span class="bus-badge {{ ticket.bus_type|lower }}" style="font-size: 0.75rem;">{{ ticket.bus_type }}</span>
+                    </div>
+
+                    <!-- Journey Meta details -->
+                    <div class="ticket-body" style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                            <div>
+                                <h3 style="margin: 0; color: var(--primary); font-size: 1.4rem;">{{ ticket.bus_number }}</h3>
+                                <small style="color: var(--text-muted);">Route Service</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <h4 style="margin: 0; color: var(--text-dark); font-size: 1.2rem;">₹{{ ticket.fare }}</h4>
+                                <small style="color: var(--text-muted);">Paid via UPI</small>
+                            </div>
+                        </div>
+
+                        <div class="ticket-corridor" style="background-color: #f8fafc; padding: 0.8rem 1rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                            <div>
+                                <strong style="display: block; color: var(--text-dark);">{{ ticket.source }}</strong>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Dep: {{ ticket.departure_time }}</span>
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 1.1rem;">➔</div>
+                            <div style="text-align: right;">
+                                <strong style="display: block; color: var(--text-dark);">{{ ticket.destination }}</strong>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Arr: {{ ticket.arrival_time }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Digital Verifier Stamp -->
+                    <div class="ticket-footer" style="background-color: #f0fdf4; padding: 0.75rem 1.5rem; text-align: center; border-top: 1px solid #bbf7d0;">
+                        <span style="color: #166534; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px;">✓ VALID DIGITAL TICKET</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty Dashboard View Fallback -->
+            <div class="card empty-wallet" style="text-align: center; padding: 4rem 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎫</div>
+                <h3 style="color: var(--text-dark); margin-bottom: 0.5rem;">No active passes found</h3>
+                <p style="color: var(--text-muted); max-width: 400px; margin: 0 auto 1.5rem auto; font-size: 0.9rem; line-height: 1.5;">You haven't booked any bus trips yet. Ready to coordinate your next journey across Chennai lines?</p>
+                <a href="/" class="btn btn-primary">Find a Bus Route 🗺️</a>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

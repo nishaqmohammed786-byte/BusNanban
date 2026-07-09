@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Guide - BusNanban{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto; padding: 1rem;">
+    
+    <div style="background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 16px; padding: 1.25rem; color: white; display: flex; align-items: center; gap: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 1rem;">
+        <div style="font-size: 2.5rem; background: rgba(255,255,255,0.1); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">🤖</div>
+        <div>
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Nanban AI Transit Guide</h3>
+            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #94a3b8;">● Active Tracking Enabled</p>
+        </div>
+    </div>
+
+    <div style="background: white; border-radius: 16px; padding: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">📍 Live Route Tracker</span>
+            <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 20px;">Bus 21G • Deluxe</span>
+        </div>
+
+        <div style="position: relative; padding-left: 24px; display: flex; flex-direction: column; gap: 1.5rem;">
+            <div style="position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: #cbd5e1; border-style: dashed;"></div>
+            
+            <div style="position: relative;">
+                <div style="position: absolute; left: -23px; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: #10b981; border: 3px solid white; box-shadow: 0 0 0 2px #10b981;"></div>
+                <h5 style="margin: 0; font-size: 0.9rem; color: #334155;">Tambaram Terminus</h5>
+                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Departed at 08:10 AM</p>
+            </div>
+
+            <div style="position: relative; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border-left: 3px solid #2563eb;">
+                <div style="position: absolute; left: -26px; top: 12px; font-size: 0.9rem; animation: pulse 2s infinite;">🚌</div>
+                <h5 style="margin: 0; font-size: 0.9rem; color: #1e293b;">Current Location: Guindy Flyover</h5>
+                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #2563eb; font-weight: 600;">Next Stop: Little Mount (3 mins away)</p>
+            </div>
+
+            <div style="position: relative;">
+                <div style="position: absolute; left: -23px; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 3px solid white; box-shadow: 0 0 0 2px #ef4444;"></div>
+                <h5 style="margin: 0; font-size: 0.9rem; color: #334155;">Chennai Central</h5>
+                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Estimated Arrival: 09:05 AM (Approx. 12 km left)</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 12px; display: flex; gap: 8px; margin-bottom: 1rem;">
+        <span style="font-size: 1.2rem;">💡</span>
+        <p style="margin: 0; font-size: 0.85rem; color: #166534; line-height: 1.4;">
+            <strong>AI Suggestion:</strong> Move toward the front exit doors. Your destination (Chennai Central) is approaching in 2 stops, and heavy traffic is expected near the signal.
+        </p>
+    </div>
+
+    <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; height: 280px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div id="chat-box" style="flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+            <div style="align-self: flex-start; background: #f1f5f9; padding: 8px 14px; border-radius: 12px; max-width: 80%; color: #334155;">
+                Vanakkam! I am checking your active pass. Your bus (21G) is currently cross-referencing Guindy. Ask me anything about your route!
+            </div>
+        </div>
+
+        <div style="padding: 8px 12px; border-top: 1px solid #f1f5f9; display: flex; gap: 8px;">
+            <input type="text" id="chat-input" placeholder="Ask assistant about your trip..." style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 10px; outline: none; font-size: 0.9rem;">
+            <button onclick="sendChatMessage()" style="background: #2563eb; color: white; border: none; padding: 0 16px; border-radius: 10px; font-weight: 600; cursor: pointer;">Send</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Conversational client responses simulation engine 
+    function sendChatMessage() {
+        const input = document.getElementById('chat-input');
+        const chatBox = document.getElementById('chat-box');
+        if (!input.value.trim()) return;
+
+        // Render User Message
+        const userDiv = document.createElement('div');
+        userDiv.style.alignSelf = 'flex-end';
+        userDiv.style.background = '#2563eb';
+        userDiv.style.color = 'white';
+        userDiv.style.padding = '8px 14px';
+        userDiv.style.borderRadius = '12px';
+        userDiv.style.maxWidth = '80%';
+        userDiv.innerText = input.value;
+        chatBox.appendChild(userDiv);
+
+        const userText = input.value.toLowerCase();
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Process Automated Intelligent Smart AI Answers
+        setTimeout(() => {
+            const aiDiv = document.createElement('div');
+            aiDiv.style.alignSelf = 'flex-start';
+            aiDiv.style.background = '#f1f5f9';
+            aiDiv.style.color = '#334155';
+            aiDiv.style.padding = '8px 14px';
+            aiDiv.style.borderRadius = '12px';
+            aiDiv.style.maxWidth = '80%';
+
+            if (userText.includes('status') || userText.includes('where')) {
+                aiDiv.innerText = "Bus 21G is moving at 34 km/h near the Guindy flyover intersection. Traffic is moderate. ETA to next stop is 3 minutes.";
+            } else if (userText.includes('crowd') || userText.includes('seat')) {
+                aiDiv.innerText = "Our telemetry maps show moderate occupancy (approx. 70% full). Seats are limited in the middle rows.";
+            } else {
+                aiDiv.innerText = "I am monitoring your route coordinates live. Let me know if you need automated alerts for alternative connections or stop alerts!";
+            }
+
+            chatBox.appendChild(aiDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 800);
+    }
+</script>

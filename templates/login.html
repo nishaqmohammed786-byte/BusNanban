@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Login / Sign Up - BusNanban{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="card auth-card">
+        <div class="auth-header">
+            <h2>Welcome to BusNanban 🚌</h2>
+            
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/auth/login" method="POST" class="auth-form" id="otpForm">
+            
+            <div class="form-group">
+                <label for="phone_number">Mobile Number</label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">+91</span>
+                    <input type="tel" id="phone_number" name="phone_number" placeholder="Enter 10-digit phone number" pattern="[6-9][0-9]{9}" required>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline btn-block" id="sendOtpBtn" onclick="triggerSimulatedOTP()">Send Verification OTP 📩</button>
+
+            <div id="otpVerificationSection" style="display: none; margin-top: 1.5rem; border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 1.5rem;">
+                
+                <div class="form-group">
+                    <label for="otp">Enter 4-Digit OTP</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔑</span>
+                        <input type="text" id="otp" name="otp" placeholder="Enter OTP (Try 1234)" max_length="4">
+                    </div>
+                    <small style="color: var(--primary-light); font-weight: 500;">Simulated OTP sent! Use code: <strong>1234</strong></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Your Name</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="username" name="username" placeholder="Enter your full name for bus pass">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Verify & Enter Dashboard 🚀</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function triggerSimulatedOTP() {
+    const phoneInput = document.getElementById('phone_number');
+    
+    // Simple frontend validation before shifting views
+    if(phoneInput.value.trim().length === 10) {
+        document.getElementById('otpVerificationSection').style.display = 'block';
+        document.getElementById('sendOtpBtn').innerText = 'OTP Sent Resend? 🔄';
+    } else {
+        alert('Please enter a valid 10-digit Indian phone number.');
+    }
+}
+</script>
+{% endblock %}

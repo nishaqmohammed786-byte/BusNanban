@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Fleet Operations - BusNanban{% endblock %}
+
+{% block content %}
+<div class="management-container" style="max-width: 1100px; margin: 2rem auto; padding: 0 1rem;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 1rem;">
+        <div>
+            <h2 style="margin: 0; color: var(--text-dark);">Active Bus Services Catalog</h2>
+            <p style="margin: 0.25rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Add, check routes, or remove active fleet options from the operational line loop.</p>
+        </div>
+        <a href="/admin/dashboard" class="btn btn-outline">⬅️ Back to Admin Stats</a>
+    </div>
+
+    <!-- Alert / Flashed Notifications Banner Panel -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}" style="margin-bottom: 1.5rem; padding: 0.8rem; border-radius: 4px;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div style="background-color: white; border-radius: var(--radius); border: 1px solid rgba(0,0,0,0.08); padding: 1.5rem; overflow-x: auto; box-shadow: var(--shadow);">
+        {% if buses %}
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid rgba(0,0,0,0.08); color: var(--text-muted);">
+                    <th style="padding: 1rem 0.75rem;">Bus No</th>
+                    <th style="padding: 1rem 0.75rem;">Type Class</th>
+                    <th style="padding: 1rem 0.75rem;">Starting Location</th>
+                    <th style="padding: 1rem 0.75rem;">Terminus Target</th>
+                    <th style="padding: 1rem 0.75rem;">Departure</th>
+                    <th style="padding: 1rem 0.75rem;">Arrival</th>
+                    <th style="padding: 1rem 0.75rem;">Fare Price</th>
+                    <th style="padding: 1rem 0.75rem; text-align: center;">Operational Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bus in buses %}
+                <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+                    <td style="padding: 1.25rem 0.75rem; font-weight: 700; color: var(--primary);">{{ bus.bus_number }}</td>
+                    <td style="padding: 1.25rem 0.75rem;"><span class="bus-badge {{ bus.bus_type|lower }}" style="font-size:0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px;">{{ bus.bus_type }}</span></td>
+                    <td style="padding: 1.25rem 0.75rem; color: var(--text-dark);">{{ bus.source }}</td>
+                    <td style="padding: 1.25rem 0.75rem; color: var(--text-dark);">{{ bus.destination }}</td>
+                    <td style="padding: 1.25rem 0.75rem;">{{ bus.departure_time }}</td>
+                    <td style="padding: 1.25rem 0.75rem;">{{ bus.arrival_time }}</td>
+                    <td style="padding: 1.25rem 0.75rem; font-weight: 600;">₹{{ bus.fare }}</td>
+                    <td style="padding: 1.25rem 0.75rem; text-align: center;">
+                        <form action="/admin/bus/delete/{{ bus.id }}" method="POST" onsubmit="return confirm('Remove route {{ bus.bus_number }} from active city rotation?');" style="margin: 0; display: inline-block;">
+                            <button type="submit" class="btn btn-outline" style="color: #dc2626; border-color: #fca5a5; padding: 0.3rem 0.75rem; font-size: 0.8rem; background-color: #fef2f2;">Terminate Line 🗑️</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+            <p style="margin: 0 0 1rem 0;">No active fleet schedules found inside the database system catalog.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

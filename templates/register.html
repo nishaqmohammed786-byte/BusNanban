@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Join BusNanban - Chennai Bus Companion{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="card auth-card">
+        <div class="auth-header">
+            <h2>Create Your Account 🚌</h2>
+            <p>Join thousands of daily Chennai commuters traveling smarter.</p>
+        </div>
+
+        <form action="/auth/register" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Full Name / Username</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="username" name="username" placeholder="e.g., Ramesh Kumar" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📧</span>
+                    <input type="email" id="email" name="email" placeholder="name@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Create Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="password" name="password" placeholder="Minimum 6 characters" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Register Account 🎉</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="/auth/login">Log in here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

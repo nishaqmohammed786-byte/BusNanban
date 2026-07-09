@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Secure Ticket Checkout - BusNanban{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    
+    <!-- Left Column: Order Summary Card -->
+    <div class="card payment-summary-card">
+        <h3>Ticket Summary 🎫</h3>
+        <hr class="divider">
+        <div class="summary-row">
+            <span>Route</span>
+            <strong>Kilambakkam (KCBT) ➔ Guindy</strong>
+        </div>
+        <div class="summary-row">
+            <span>Bus Service</span>
+            <strong>51A (AC Deluxe)</strong>
+        </div>
+        <div class="summary-row">
+            <span>Pass Type</span>
+            <span>Single Journey Ticket</span>
+        </div>
+        <hr class="divider">
+        <div class="summary-row total-row">
+            <span>Total Payable Amount</span>
+            <span class="total-price">₹35.00</span>
+        </div>
+        <div class="secure-badge">
+            <span>🔒 Bank-Grade 256-Bit Encryption</span>
+        </div>
+    </div>
+
+    <!-- Right Column: Interactive UPI Gateway Portal -->
+    <div class="card payment-methods-card">
+        <h2>Select Payment Method</h2>
+        <p class="subtitle">Scan the QR code or enter your UPI ID to instantly generate your digital ticket.</p>
+
+        <div class="payment-tabs">
+            <div class="tab active">Instant UPI QR</div>
+        </div>
+
+        <div class="qr-payment-section">
+            <!-- Simulated QR Code Element using a clean geometric placeholder -->
+            <div class="qr-code-wrapper">
+                <div class="qr-placeholder">
+                    <span class="qr-icon">📱</span>
+                    <p>Scan with GPay, PhonePe, or Paytm</p>
+                    <div class="simulated-qr-borders"></div>
+                </div>
+            </div>
+
+            <div class="or-separator">
+                <span>OR PAY USING UPI ID</span>
+            </div>
+
+            <form action="/auth/profile" method="GET" class="upi-form">
+                <div class="form-group">
+                    <label for="upi_id">Virtual Payment Address (VPA)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">💳</span>
+                        <input type="text" id="upi_id" name="upi_id" placeholder="e.g., username@oksbi, mobile@ybl" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Verify & Pay ₹35.00 🚀</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

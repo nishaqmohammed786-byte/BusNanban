@@ -1,0 +1,21 @@
+{
+  "name": "BusNanban Commuter Pass",
+  "short_name": "BusNanban",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e293b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/color/192/bus.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://img.icons8.com/color/512/bus.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
