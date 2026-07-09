@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusNanban - Admin Hub</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; }
+        .header { background: #1e3a8a; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h2 { margin-top: 0; color: #1e3a8a; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; font-size: 18px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #e5e7eb; }
+        th { background: #f3f4f6; color: #4b5563; }
+        .badge { padding: 4px 8px; border-radius: 20px; font-size: 12px; font-weight: bold; background: #d1fae5; color: #065f46; }
+        .feedback-item { padding: 10px; border-bottom: 1px solid #f3f4f6; }
+        .feedback-user { font-weight: bold; font-size: 14px; color: #4b5563; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 style="margin:0; font-size: 20px;">🚍 BusNanban Admin Panel</h1>
+        <p style="margin:5px 0 0 0; opacity:0.8; font-size:12px;">Live Route Management & Oversight</p>
+    </div>
+
+    <div class="card">
+        <h2>📍 Active Transit Routes</h2>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Route Plan</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                {% for r in routes %}
+                <tr><td><b>{{ r.id }}</b></td><td>{{ r.name }}</td><td><span class="badge">{{ r.status }}</span></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>🎟️ Booking Manifest</h2>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Passenger</th><th>Route</th></tr>
+            </thead>
+            <tbody>
+                {% for t in tickets %}
+                <tr><td>{{ t.id }}</td><td>{{ t.user }}</td><td>{{ t.route }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>💬 Passenger Feedback</h2>
+        {% for f in feedbacks %}
+        <div class="feedback-item">
+            <div class="feedback-user">{{ f.user }}</div>
+            <div style="font-size: 13px; color: #1f2937; margin-top: 4px;">"{{ f.msg }}"</div>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
