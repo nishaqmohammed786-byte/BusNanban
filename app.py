@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, redirect, url_for
 from models.user import init_user_table
 from models.bus import init_bus_table
 from models.ticket import init_ticket_table
@@ -17,10 +17,9 @@ def create_app():
         init_ticket_table()
 
     # Import and register Blueprints
-    # Import and register Blueprints
     from routes.auth import auth_bp
     from routes.search import search_bp
-    from routes.admin import admin_bp  # Make sure it says routes.admin here!
+    from routes.admin import admin_bp 
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(search_bp, url_prefix='/search')
@@ -35,16 +34,17 @@ def create_app():
     def payment():
         return render_template('payment.html')
 
+    # --- AI ASSISTANT ROUTE (Added here so it matches your bottom nav) ---
+    @app.route('/ai-assistant')
+    def ai_assistant():
+        if not session.get('user_id'):
+            return redirect(url_for('auth.login'))
+        return render_template('ai_assistant.html')
+
+    # --- CLEANED UP CORRECT PROFILE ROUTE ---
     @app.route('/profile')
     def profile():
-        # Session checking barrier for secure client profile rendering
-        if not session.get('user_id'):
-            return render_template('login.html')
-        return render_template('profile.html')
-    
-    @app.route('/profile')
-    def profile_dashboard():  # Changed from "profile" to "profile_dashboard"
-        # Session security barrier: send to login if not authenticated
+        # Session security barrier: send to login template if not authenticated
         if not session.get('user_id'):
             return render_template('login.html')
             
@@ -56,7 +56,10 @@ def create_app():
     
     return app
 
+# --- EXPOSE APP OBJECT FOR VERCEL ---
+# This pulls the app instance out of the function so Vercel can run it instantly!
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
-    # Adding host='0.0.0.0' tells Flask to open up to mobile connections
+    # Adding host='0.0.0.0' tells Flask to open up to local mobile connections
     app.run(host='0.0.0.0', port=5000, debug=True)
