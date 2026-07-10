@@ -1,47 +1,34 @@
 import sqlite3
-import os
-
-def get_db_connection():
-    db_path = os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'busnanban.db')
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    return conn
+from flask import g
+# Import your actual get_db function from wherever your db/database file is located
+# For example, if it's in a file named database.py in your root: from database import get_db
+from database import get_db 
 
 def init_user_table():
-    """Initializes the user table with mobile authentication fields."""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            phone_number TEXT UNIQUE NOT NULL,
-            name TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-def get_user_by_phone(phone_number):
-    conn = get_db_connection()
-    user = conn.execute('SELECT * FROM users WHERE phone_number = ?', (phone_number,)).fetchone()
-    conn.close()
-    return user
-
-def create_user(phone_number, name):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        'INSERT INTO users (phone_number, name) VALUES (?, ?)',
-        (phone_number, name)
-    )
-    conn.commit()
-    user_id = cursor.lastrow_index if hasattr(cursor, 'lastrow_index') else cursor.lastrowid
-    conn.close()
-    return user_id
-
-def update_user_name(phone_number, name):
-    conn = get_db_connection()
-    conn.execute('UPDATE users SET name = ? WHERE phone_number = ?', (name, phone_number))
-    conn.commit()
-    conn.close()
+    db = get_db()
+    cursor = db.cursor()
+    
+    # Check if the connection type is SQLite (Vercel) or MySQL (Local PC)
+    if isinstance(db, sqlite3.Connection):
+        # --- SQLite syntax for Vercel ---
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )
+        """)
+    else:
+        # --- MySQL syntax for your Local PC ---
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(50) NOT NULL,
+                password VARCHAR(255) NOT NULL
+            )
+        """)
+        
+    db.commit()
+    cursor.close()
+    # Note: Do NOT call db.close() here because your close_db() function 
+    # automatically handles closing it when the web request ends!
